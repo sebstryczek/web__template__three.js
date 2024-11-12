@@ -2,20 +2,29 @@ import * as THREE from "three";
 import { CSS2DRenderer } from "three/addons/renderers/CSS2DRenderer.js";
 
 import { Updatable } from "../../utils/three/Updatable";
+import { Event } from "../../utils/general/Event.ts";
 
 interface Props {
-  canvas: HTMLCanvasElement;
+  canvasElement: HTMLCanvasElement;
   cssRendererElement: HTMLDivElement;
   renderLoopFunction: Updatable["update"];
 }
 
 class RenderingManager {
-  private renderer: THREE.WebGLRenderer;
+  public readonly onCanvasElementSizeChanged = new Event<{ width: number; height: number }>({
+    name: "onCanvasElementSizeChanged",
+  });
+  private readonly canvasElement: HTMLCanvasElement;
+  private readonly resizeObserver: ResizeObserver;
+
+  public readonly renderer: THREE.WebGLRenderer;
   private renderer2D: CSS2DRenderer;
 
-  constructor({ canvas, cssRendererElement, renderLoopFunction }: Props) {
+  constructor({ canvasElement, cssRendererElement, renderLoopFunction }: Props) {
+    this.canvasElement = canvasElement;
+
     this.renderer = new THREE.WebGLRenderer({
-      canvas,
+      canvas: this.canvasElement,
       alpha: true,
       antialias: true,
     });
@@ -23,11 +32,14 @@ class RenderingManager {
     this.renderer.setAnimationLoop(renderLoopFunction);
 
     this.renderer2D = new CSS2DRenderer({ element: cssRendererElement });
+
+    this.resizeObserver = new ResizeObserver(this.handleOnResize);
+    this.resizeObserver.observe(this.canvasElement);
   }
 
-  public setSize({ width, height }: { width: number; height: number }) {
-    this.renderer.setSize(width, height, false);
-    this.renderer2D.setSize(width, height);
+  public dispose() {
+    this.resizeObserver.unobserve(this.canvasElement);
+    this.resizeObserver.disconnect();
   }
 
   public render({ scene, camera }: { scene: THREE.Scene; camera: THREE.Camera }) {
@@ -35,6 +47,14 @@ class RenderingManager {
     this.renderer.render(scene, camera);
     this.renderer2D.render(scene, camera);
   }
+
+  private handleOnResize = () => {
+    const { width, height } = this.canvasElement.getBoundingClientRect();
+
+    this.renderer.setSize(width, height, false);
+    this.renderer2D.setSize(width, height);
+    this.onCanvasElementSizeChanged.trigger({ width, height });
+  };
 }
 
 export { RenderingManager };

@@ -18,13 +18,13 @@ class CameraSystemsManager implements Updatable {
 
   private cameraSystems = new Map<string, CameraSystem>();
 
-  constructor({ canvas }: { canvas: HTMLCanvasElement }) {
+  constructor({ canvasElement }: { canvasElement: HTMLCanvasElement }) {
     this.cameraSystems.set(
       "main",
       new CameraSystem({
         cameraControls: {
           type: "map",
-          eventsObject: canvas,
+          eventsObject: canvasElement,
         },
       }),
     );

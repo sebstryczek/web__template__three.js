@@ -20,8 +20,8 @@ const DEFAULT_ORTHOGRAPHIC_CAMERA_PARAMETERS = Object.values({
 });
 
 class CameraSystem implements Updatable {
-  private perspectiveCamera: THREE.PerspectiveCamera;
-  private orthographicCamera: THREE.OrthographicCamera;
+  private readonly perspectiveCamera: THREE.PerspectiveCamera;
+  private readonly orthographicCamera: THREE.OrthographicCamera;
 
   #activeCamera: THREE.PerspectiveCamera | THREE.OrthographicCamera;
   public get activeCamera() {
@@ -32,7 +32,12 @@ class CameraSystem implements Updatable {
 
   constructor({ cameraControls }: { cameraControls: { type: "none" | "map" | "orbit"; eventsObject: HTMLElement } }) {
     this.perspectiveCamera = new THREE.PerspectiveCamera(...DEFAULT_PERSPECTIVE_CAMERA_PARAMETERS);
+    this.perspectiveCamera.layers.set(0);
+    this.perspectiveCamera.layers.enable(31);
+
     this.orthographicCamera = new THREE.OrthographicCamera(...DEFAULT_ORTHOGRAPHIC_CAMERA_PARAMETERS);
+    this.orthographicCamera.layers.set(0);
+    this.orthographicCamera.layers.enable(31);
 
     this.#activeCamera = this.perspectiveCamera;
 

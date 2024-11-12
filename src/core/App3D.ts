@@ -1,13 +1,15 @@
 import { version as _version } from "../../package.json";
 
 import { RenderingManager } from "./rendering";
-import { EventsManager } from "./events";
 import { CameraSystemsManager } from "./camera";
 import { ScenesManager } from "./scene";
+import { PointerManager } from "./pointer";
+import { StatsPanel } from "./debug";
 
 interface Props {
-  canvas: HTMLCanvasElement;
+  canvasElement: HTMLCanvasElement;
   cssRendererElement: HTMLDivElement;
+  statsPanelElement: HTMLDivElement;
 }
 
 class App3D {
@@ -15,35 +17,52 @@ class App3D {
     return _version;
   }
 
+  public readonly renderingManager: RenderingManager;
   public readonly scenesManager: ScenesManager;
   public readonly cameraSystemsManager: CameraSystemsManager;
+  public readonly pointerManager: PointerManager;
 
-  private eventsManager: EventsManager;
-  private renderingManager: RenderingManager;
+  private readonly statsPanel: StatsPanel;
 
-  constructor({ canvas, cssRendererElement }: Props) {
-    const renderingManager = new RenderingManager({ canvas, cssRendererElement, renderLoopFunction: this.renderLoop });
+  constructor({ canvasElement, cssRendererElement, statsPanelElement }: Props) {
+    const renderingManager = new RenderingManager({
+      canvasElement,
+      cssRendererElement,
+      renderLoopFunction: this.renderLoop,
+    });
     const scenesManager = new ScenesManager();
-    const cameraSystemsManager = new CameraSystemsManager({ canvas });
-    const eventsManager = new EventsManager({ canvas, renderingManager, cameraSystemsManager });
+    const cameraSystemsManager = new CameraSystemsManager({ canvasElement });
+    const pointerManager = new PointerManager({ canvasElement, cameraSystemsManager, scenesManager });
 
     this.renderingManager = renderingManager;
     this.scenesManager = scenesManager;
     this.cameraSystemsManager = cameraSystemsManager;
-    this.eventsManager = eventsManager;
+    this.pointerManager = pointerManager;
+
+    this.renderingManager.onCanvasElementSizeChanged.add(({ width, height }) => {
+      this.cameraSystemsManager.setSize({ width, height });
+    });
+
+    this.statsPanel = new StatsPanel({ renderer: this.renderingManager.renderer, statsPanelElement });
+    this.statsPanel.show();
   }
 
-  dispose() {
-    this.eventsManager.dispose();
+  public dispose() {
+    this.renderingManager.dispose();
+    this.statsPanel.dispose();
   }
 
   public renderLoop = (timeDelta: number) => {
     this.scenesManager.update(timeDelta);
     this.cameraSystemsManager.update(timeDelta);
+    this.pointerManager.update();
+
     this.renderingManager.render({
       scene: this.scenesManager.activeScene,
       camera: this.cameraSystemsManager.activeCameraSystem.activeCamera,
     });
+
+    this.statsPanel.update();
   };
 }
 

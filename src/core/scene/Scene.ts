@@ -30,16 +30,24 @@ abstract class Scene extends THREE.Scene implements Updatable {
 
   private createFloor() {
     const plane = createPlane({ size: 20, color: 0xffffff });
+    plane.layers.set(31);
     this.add(plane);
   }
 
   private createGrid() {
-    this.add(new THREE.GridHelper(20, 20));
-    this.add(new THREE.GridHelper(100, 10));
+    const gridSmall = new THREE.GridHelper(20, 20);
+    gridSmall.layers.set(31);
+    this.add(gridSmall);
+
+    const gridLarge = new THREE.GridHelper(100, 10);
+    gridLarge.layers.set(31);
+    this.add(gridLarge);
   }
 
   private createAxes() {
-    this.add(new LabeledAxesHelper());
+    const axesHelepr = new LabeledAxesHelper();
+    axesHelepr.layers.set(31);
+    this.add(axesHelepr);
   }
 
   public abstract update(timeDelta: number): void;
