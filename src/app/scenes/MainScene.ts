@@ -1,4 +1,4 @@
-import { Scene } from "../core/scene";
+import { Scene } from "../../three/scene";
 import * as THREE from "three";
 
 class MainScene extends Scene {

@@ -1,10 +1,10 @@
 import { version as _version } from "../../package.json";
 
-import { RenderingManager } from "./rendering";
-import { CameraSystemsManager } from "./camera";
-import { ScenesManager } from "./scene";
-import { PointerManager } from "./pointer";
-import { StatsPanel } from "./debug";
+import { RenderingManager } from "../three/rendering";
+import { CameraSystemsManager } from "../three/camera";
+import { ScenesManager } from "../three/scene";
+import { PointerManager } from "../three/pointer";
+import { StatsPanel } from "../three/debug";
 
 interface Props {
   canvasElement: HTMLCanvasElement;

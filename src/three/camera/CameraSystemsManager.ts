@@ -1,5 +1,5 @@
 import { CameraSystem } from ".";
-import { Updatable } from "../../utils/three/Updatable";
+import { Updatable } from "../utils/interfaces/Updatable";
 
 class CameraSystemsManager implements Updatable {
   #activeCameraSystem: CameraSystem;

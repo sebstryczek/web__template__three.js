@@ -1,8 +1,8 @@
 import * as THREE from "three";
 import { CSS2DRenderer } from "three/addons/renderers/CSS2DRenderer.js";
 
-import { Updatable } from "../../utils/three/Updatable";
-import { Event } from "../../utils/general/Event.ts";
+import { Updatable } from "../utils/interfaces/Updatable.ts";
+import { Event } from "../../core/general/entities/Event/Event.ts";
 
 interface Props {
   canvasElement: HTMLCanvasElement;

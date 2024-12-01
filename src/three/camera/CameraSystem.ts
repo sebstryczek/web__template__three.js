@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { MapControls } from "three/addons/controls/MapControls.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { Updatable } from "../../utils/three/Updatable";
+import { Updatable } from "../utils/interfaces";
 
 const DEFAULT_PERSPECTIVE_CAMERA_PARAMETERS = Object.values({
   fov: 70,

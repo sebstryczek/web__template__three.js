@@ -1,6 +1,6 @@
 import * as THREE from "three";
-import { createPlane } from "../../utils/three/createPlane";
-import { Updatable } from "../../utils/three/Updatable";
+import { createPlane } from "../utils/geometry-creators/createPlane";
+import { Updatable } from "../utils/interfaces/Updatable";
 import { LabeledAxesHelper } from "../helpers/LabeledAxesHelper";
 
 interface Props {

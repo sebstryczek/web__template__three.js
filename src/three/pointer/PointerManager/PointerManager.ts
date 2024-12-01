@@ -1,8 +1,8 @@
 import * as THREE from "three";
-import { Updatable } from "../../../utils/three/Updatable";
+import { Updatable } from "../../utils/interfaces/Updatable";
 import { CameraSystemsManager } from "../../camera";
 import { ScenesManager } from "../../scene";
-import { Event } from "../../../utils/general/Event";
+import { Event } from "../../../core/general/entities/Event/Event";
 
 class PointerManager implements Updatable {
   public onPointerEnteredObject3D = new Event<{ object3D: THREE.Object3D }>({ name: "onPointerEnteredObject3D" });

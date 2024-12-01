@@ -1,5 +1,5 @@
 import { Scene } from "./Scene";
-import { Updatable } from "../../utils/three/Updatable";
+import { Updatable } from "../utils/interfaces/Updatable";
 
 class ScenesManager implements Updatable {
   #activeScene: Scene | undefined;

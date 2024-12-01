@@ -1,8 +1,9 @@
-import { App3D } from "./core/App3D";
-import { getElement } from "./utils/browser/getElement";
-import { MainScene } from "./scenes/MainScene";
+import { App3D } from "./app";
+import { getElement } from "./core/browser";
+import { MainScene } from "./app/scenes";
 import * as THREE from "three";
-import { isMesh } from "./utils/three/isMesh.ts";
+
+import { isMesh } from "./three/utils/type-guards";
 
 const main = () => {
   const canvasElement = getElement<HTMLCanvasElement>("#app-canvas");
